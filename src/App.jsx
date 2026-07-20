@@ -1,851 +1,465 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState } from 'react';
 
-// Comprehensive word list with definitions (8000+ common English words)
-const WORD_DEFINITIONS = {
-  'roams': 'wanders freely',
-  'solar': 'relating to the sun',
-  'moans': 'makes a low sound',
-  'roast': 'cook with dry heat',
-  'soar': 'fly high',
-  'mars': 'damages or spoils',
-  'arms': 'limbs or weapons',
-  'rams': 'male sheep or pushes',
-  'oars': 'rowing implements',
-  'aromas': 'pleasant smells',
-  'roams': 'wanders',
-  'soars': 'flies high',
-  'morals': 'principles of right conduct',
-  'moras': 'delays',
-  'atoms': 'smallest units of matter',
-  'moats': 'water-filled ditches',
-  'stomp': 'step heavily',
-  'storm': 'violent weather',
-  'morse': 'walrus (archaic)',
-  'stoma': 'small opening',
-  'roams': 'wanders freely',
-  'rooms': 'enclosed spaces',
-  'boars': 'wild pigs',
-  'boast': 'brag about',
-  'toast': 'browned bread',
-  'coast': 'shoreline',
-  'roast': 'cook with heat',
-  'smart': 'intelligent or stylish',
-  'scare': 'frighten',
-  'stare': 'gaze intently',
-  'tears': 'rips or cries',
-  'rates': 'speeds or prices',
-  'crate': 'wooden box',
-  'trace': 'mark or follow',
-  'cares': 'shows concern',
-  'races': 'competitions',
-  'acres': 'land measurements',
-  'scare': 'frighten',
-  'scale': 'climb or size',
-  'clear': 'transparent or obvious',
-  'steal': 'take without permission',
-  'stale': 'not fresh',
-  'least': 'smallest amount',
-  'steal': 'thieve',
-  'slate': 'gray rock',
-  'tales': 'stories',
-  'steal': 'rob',
-  'tease': 'make fun of',
-  'please': 'make happy',
-  'speak': 'use words',
-  'peaks': 'mountain tops',
-  'leaks': 'holes or escapes',
-  'steak': 'cut of meat',
-  'sneak': 'move secretly',
-  'dream': 'nocturnal vision',
-  'drams': 'small drinks',
-  'armed': 'equipped with weapons',
-  'dames': 'women (old-fashioned)',
-  'dares': 'challenges',
-  'reads': 'looks at words',
-  'dreads': 'fears greatly',
-  'thread': 'thin strand',
-  'thread': 'pass through',
-  'trader': 'buys and sells',
-  'tread': 'step on',
-  'dear': 'loved one or expensive',
-  'dare': 'challenge',
-  'read': 'look at words',
-  'dread': 'fear greatly',
-  'trade': 'exchange goods',
-  'thread': 'thin cord',
-  'heart': 'organ that pumps blood',
-  'earth': 'the planet',
-  'hater': 'one who dislikes',
-  'heard': 'past tense of hear',
-  'tread': 'walk on',
-  'trade': 'business exchange',
-  'haters': 'ones who dislike',
-  'hearts': 'pumping organs',
-  'earths': 'planets or soil',
-  'thread': 'thin strand',
-  'threads': 'thin strands',
-  'threads': 'conversations online',
-  'bread': 'baked good',
-  'beard': 'facial hair',
-  'breads': 'loaves',
-  'beards': 'facial hair growths',
-  'adore': 'love deeply',
-  'oared': 'rowed',
-  'adored': 'loved deeply',
-  'robed': 'wearing a robe',
-  'bored': 'not interested',
-  'bored': 'drilled a hole',
-  'robed': 'dressed in robes',
-  'bead': 'small decorative ball',
-  'bred': 'raised animals',
-  'braid': 'woven strands',
-  'beard': 'face hair',
-  'beads': 'small balls',
-  'bride': 'woman on wedding day',
-  'braids': 'woven hair',
-  'boards': 'wooden planks',
-  'broads': 'wide areas (informal)',
-  'rapids': 'fast water',
-  'rapids': 'quick currents',
-  'spread': 'cover widely',
-  'spreads': 'covers',
-  'drapes': 'window curtains',
-  'spared': 'gave mercifully',
-  'spade': 'digging tool',
-  'spades': 'digging tools',
-  'spades': 'suit in cards',
-  'grasped': 'held tightly',
-  'gasped': 'breathed sharply',
-  'grasp': 'hold firmly',
-  'grasp': 'understand',
-  'grasp': 'seize',
-  'grass': 'green plant',
-  'grasps': 'holds',
-  'gasps': 'sharp breaths',
-  'spare': 'extra or show mercy',
-  'spear': 'long pointed weapon',
-  'spares': 'extras',
-  'spears': 'pointed weapons',
-  'paste': 'adhesive substance',
-  'tapes': 'adhesive strips',
-  'pates': 'heads (old)',
-  'sedate': 'calm and dignified',
-  'sedates': 'calms with drugs',
-  'sated': 'fully satisfied',
-  'stated': 'said formally',
-  'states': 'nations or conditions',
-  'dates': 'calendar days or fruits',
-  'haste': 'hurry',
-  'waste': 'garbage or squander',
-  'waist': 'middle of body',
-  'waists': 'body middles',
-  'waste': 'throw away',
-  'taste': 'flavor or experience',
-  'tasted': 'experienced flavor',
-  'tastes': 'flavors',
-  'taste': 'sense of flavor',
-  'tasty': 'delicious',
-  'steam': 'water vapor',
-  'teams': 'groups working together',
-  'steams': 'water vapor rises',
-  'seam': 'stitched line',
-  'seams': 'stitched lines',
-  'meat': 'animal flesh food',
-  'mate': 'friend or partner',
-  'mated': 'paired for breeding',
-  'mates': 'friends',
-  'meats': 'animal foods',
-  'steam': 'hot water vapor',
-  'tames': 'makes gentle',
-  'sedate': 'calm',
-  'teams': 'groups',
-  'meats': 'flesh foods',
-  'stream': 'flowing water',
-  'master': 'skilled person',
-  'streams': 'flowing waters',
-  'master': 'expert',
-  'masters': 'experts',
-  'stream': 'small river',
-  'stream': 'flow steadily',
-  'smart': 'intelligent',
-  'smart': 'fashionable',
-  'smarts': 'stings',
-  'smart': 'witty remark',
-  'storm': 'violent weather',
-  'storms': 'weather events',
-  'straw': 'drinking tube',
-  'straws': 'tubes',
-  'warts': 'skin growths',
-  'wart': 'skin growth',
-  'warm': 'pleasantly hot',
-  'warm': 'show affection',
-  'warms': 'heats',
-  'swarm': 'crowd of insects',
-  'swarms': 'insect groups',
-  'warms': 'makes warm',
-  'warm': 'friendly',
-  'wards': 'hospital sections',
-  'ward': 'protect',
-  'draw': 'sketch or pull',
-  'drawn': 'pulled or sketched',
-  'draws': 'sketches',
-  'draws': 'pulls',
-  'drawer': 'storage compartment',
-  'drawers': 'storage boxes',
-  'reward': 'prize',
-  'rewards': 'prizes',
-  'reward': 'give prize',
-  'rewards': 'gives prizes',
-  'sword': 'long blade weapon',
-  'swords': 'blade weapons',
-  'words': 'units of speech',
-  'word': 'unit of speech',
-  'wore': 'had on clothing',
-  'more': 'greater amount',
-  'sore': 'painful',
-  'store': 'shop or keep',
-  'stole': 'took without permission',
-  'stole': 'draped garment',
-  'stoles': 'draped garments',
-  'stores': 'shops',
-  'stores': 'keeps',
-  'sores': 'painful areas',
-  'score': 'points earned',
-  'scored': 'earned points',
-  'scores': 'points',
-  'scores': 'many',
-  'horse': 'four-legged animal',
-  'horses': 'animals',
-  'horse': 'athletic equipment',
-  'hoarse': 'rough voice',
-  'shore': 'beach or coast',
-  'shores': 'beaches',
-  'shore': 'support or brace',
-  'shored': 'braced up',
-  'shores': 'supports',
-  'snore': 'sleep sound',
-  'snores': 'sleep sounds',
-  'snored': 'made sleep sound',
-  'sworn': 'made an oath',
-  'sworn': 'declared under oath',
-  'swore': 'made oath',
-  'swore': 'used profanity',
-  'wars': 'armed conflicts',
-  'war': 'armed conflict',
-  'soar': 'fly high',
-  'soared': 'flew high',
-  'soars': 'flies high',
-  'roam': 'wander freely',
-  'roams': 'wanders freely',
-  'roamed': 'wandered',
-  'roamer': 'one who wanders',
-  'roamers': 'wanderers',
-  'roaming': 'wandering',
-  'room': 'enclosed space',
-  'rooms': 'enclosed spaces',
-  'rooms': 'enough space',
-  'roomy': 'spacious',
-  'zoom': 'move quickly',
-  'zooms': 'speeds',
-  'zoomed': 'moved quickly',
-  'boom': 'loud sound',
-  'booms': 'loud sounds',
-  'boomed': 'made loud sound',
-  'boom': 'prosperity',
-  'boomer': 'one born in boom',
-  'boomers': 'generation',
-  'bloom': 'flower or flourish',
-  'blooms': 'flowers',
-  'bloomed': 'flowered',
-  'blooming': 'flowering',
-  'groom': 'bridegroom or clean',
-  'grooms': 'bridegrooms',
-  'groomed': 'cleaned and prepared',
-  'grooming': 'preparing',
-  'broom': 'sweeping tool',
-  'brooms': 'sweeping tools',
-  'brood': 'think deeply or young animals',
-  'broods': 'young animal groups',
-  'brooded': 'thought deeply',
-  'brooding': 'thinking deeply',
-  'stood': 'was standing',
-  'stood': 'endured',
-  'food': 'something to eat',
-  'foods': 'things to eat',
-  'good': 'of high quality',
-  'goods': 'merchandise',
-  'goods': 'positive things',
-  'good': 'kind person',
-  'hood': 'covering or neighborhood',
-  'hoods': 'coverings',
-  'hoods': 'neighborhoods',
-  'wood': 'tree material',
-  'woods': 'forests or tree materials',
-  'woods': 'small forests',
-  'woody': 'containing wood',
-  'wool': 'animal fiber',
-  'wools': 'animal fibers',
-  'woolen': 'made of wool',
-  'pool': 'body of water',
-  'pools': 'bodies of water',
-  'pools': 'resources combined',
-  'pooled': 'combined resources',
-  'pooling': 'combining',
-  'cool': 'low temperature or stylish',
-  'cools': 'lowers temperature',
-  'cooled': 'became cool',
-  'cooling': 'becoming cool',
-  'tool': 'instrument or device',
-  'tools': 'devices',
-  'tools': 'uses a tool',
-  'tooled': 'shaped with tool',
-  'tooling': 'shaping',
-  'fool': 'silly person',
-  'fools': 'silly people',
-  'fooled': 'tricked',
-  'foolish': 'silly',
-  'school': 'place of learning',
-  'schools': 'places of learning',
-  'stool': 'seat without back',
-  'stools': 'seats',
-  'stool': 'feces (medical)',
-  'fool': 'make a fool of',
-  'fooling': 'tricking',
-  'fool': 'foolish person',
-  'foals': 'young horses',
-  'foal': 'young horse',
-  'foaled': 'gave birth to foal',
-  'goal': 'objective or score area',
-  'goals': 'objectives',
-  'goal': 'score area in sports',
-  'goals': 'score areas',
-  'coal': 'black mineral fuel',
-  'coals': 'mineral fuels',
-  'coal': 'charred wood',
-  'coaled': 'supplied with coal',
-  'scroll': 'roll of parchment',
-  'scrolls': 'rolls of parchment',
-  'scrolled': 'moved up/down',
-  'scrolling': 'moving',
-  'troll': 'internet troublemaker',
-  'trolls': 'troublemakers',
-  'trolled': 'made trouble online',
-  'trolling': 'causing trouble',
-  'troll': 'mythical creature',
-  'stroll': 'leisurely walk',
-  'strolls': 'leisurely walks',
-  'strolled': 'walked leisurely',
-  'strolling': 'walking',
-  'droll': 'amusing in odd way',
-  'drolly': 'amusingly',
-  'roll': 'turn over',
-  'rolls': 'turns over',
-  'rolled': 'turned over',
-  'rolling': 'turning',
-  'roll': 'bread shape',
-  'rolls': 'bread shapes',
-  'roll': 'drum sound',
-  'rolls': 'drum sounds',
-  'roller': 'cylindrical device',
-  'rollers': 'cylindrical devices',
-  'control': 'manage or restrain',
-  'controls': 'manages',
-  'controlled': 'managed',
-  'controlling': 'managing',
-  'controller': 'person in charge',
-  'controllers': 'persons in charge',
-  'troll': 'mythical creature',
-  'trolley': 'shopping cart',
-  'trolleys': 'shopping carts',
-  'patrol': 'go around checking',
-  'patrols': 'goes around',
-  'patrolled': 'went around checking',
-  'patrolling': 'going around',
-  'patrol': 'group checking area',
-  'patrols': 'groups checking',
-  'patrol': 'police group',
-  'enrolls': 'signs up',
-  'enroll': 'register',
-  'enrolled': 'registered',
-  'enrolling': 'registering',
-  'extol': 'praise enthusiastically',
-  'extols': 'praises',
-  'extolled': 'praised enthusiastically',
-  'extolling': 'praising',
-  'atoll': 'ring-shaped island',
-  'atolls': 'ring islands',
-  'stroll': 'casual walk',
-  'scroll': 'document or move display',
-  'troll': 'mythical creature or troublemaker',
-  'droll': 'amusing',
-  'knoll': 'small hill',
-  'knolls': 'small hills',
-  'poll': 'survey or vote',
-  'polls': 'surveys or votes',
-  'polled': 'surveyed or voted',
-  'polling': 'surveying',
-  'pole': 'long stick',
-  'poles': 'long sticks',
-  'pole': 'north or south pole',
-  'poles': 'earth poles',
-  'poled': 'pushed with pole',
-  'poling': 'pushing',
-  'polecat': 'smelly animal',
-  'sole': 'bottom of foot',
-  'soles': 'bottoms of feet',
-  'sole': 'only one',
-  'soles': 'only ones',
-  'sole': 'type of fish',
-  'soled': 'put sole on shoe',
-  'soling': 'putting sole on',
-  'mole': 'small burrowing animal',
-  'moles': 'burrowing animals',
-  'mole': 'skin marking',
-  'moles': 'skin markings',
-  'mole': 'spy or informant',
-  'moles': 'spies',
-  'molecule': 'group of atoms',
-  'molecules': 'atom groups',
-  'hole': 'opening or cavity',
-  'holes': 'openings',
-  'holed': 'made a hole',
-  'holing': 'making holes',
-  'vole': 'small rodent',
-  'voles': 'small rodents',
-  'role': 'part or function',
-  'roles': 'parts or functions',
-  'dole': 'distribute or money benefit',
-  'doles': 'distributes',
-  'doled': 'distributed',
-  'doling': 'distributing',
-  'dole': 'sadness',
-  'bole': 'tree trunk',
-  'boles': 'tree trunks',
-  'vole': 'rodent',
-  'whole': 'entire amount',
-  'wholes': 'entire amounts',
-  'wholesale': 'in bulk',
-  'wholly': 'completely',
-  'stole': 'took without permission',
-  'stole': 'draped garment',
-  'stolen': 'taken illegally',
-  'stealing': 'taking',
-  'steal': 'take illegally',
-  'steals': 'takes illegally',
-  'stealth': 'sneaky movement',
-  'stealthy': 'sneaky',
-  'deal': 'agreement or distribute cards',
-  'deals': 'agreements',
-  'dealt': 'distributed cards',
-  'dealing': 'distributing',
-  'dealer': 'person who deals',
-  'dealers': 'persons who deal',
-  'ideal': 'perfect',
-  'ideals': 'perfect concepts',
-  'ideal': 'perfect thing',
-  'ideally': 'perfectly',
-  'ordeal': 'difficult experience',
-  'ordeals': 'difficult experiences',
-  'meal': 'food eaten together',
-  'meals': 'food occasions',
-  'meals': 'ground grain',
-  'mealy': 'resembling meal',
-  'zeal': 'enthusiastic dedication',
-  'zeals': 'enthusiasms',
-  'zealot': 'fanatical person',
-  'zealots': 'fanatics',
-  'zealous': 'enthusiastic',
-  'zealously': 'enthusiastically',
-  'heal': 'make well',
-  'heals': 'makes well',
-  'healed': 'made well',
-  'healing': 'making well',
-  'healer': 'one who heals',
-  'healers': 'ones who heal',
-  'health': 'state of wellness',
-  'healthy': 'in good health',
-  'healthily': 'in healthy way',
-  'seal': 'close tightly',
-  'seals': 'closes tightly',
-  'sealed': 'closed tightly',
-  'sealing': 'closing tightly',
-  'seal': 'marine mammal',
-  'seals': 'marine mammals',
-  'seals': 'official marks',
-  'veal': 'calf meat',
-  'peal': 'loud sound',
-  'peals': 'loud sounds',
-  'pealed': 'rang loudly',
-  'pealing': 'ringing',
-  'peal': 'ringing of bells',
-  'teal': 'blue-green color',
-  'teals': 'blue-green colors',
-  'teal': 'type of duck',
-  'teals': 'ducks',
-  'real': 'actually existing',
-  'reals': 'actual things',
-  'real': 'currency',
-  'reals': 'currencies',
-  'reals': 'plural of real',
-  'really': 'actually',
-  'realm': 'kingdom or sphere',
-  'realms': 'kingdoms',
-  'realism': 'concern with facts',
-  'realistic': 'factual',
-  'realistically': 'factually',
-  'realize': 'become aware or achieve',
-  'realizes': 'becomes aware',
-  'realized': 'became aware',
-  'realizing': 'becoming aware',
-  'realization': 'becoming aware',
-  'weal': 'well-being or ridge',
-  'weals': 'well-beings or ridges',
-  'weal': 'welfare',
-  'zeal': 'dedication',
-  'reveal': 'make known',
-  'reveals': 'makes known',
-  'revealed': 'made known',
-  'revealing': 'making known',
-  'appeal': 'make a request',
-  'appeals': 'makes requests',
-  'appealed': 'made a request',
-  'appealing': 'attractive or requesting',
-  'appeal': 'attractive quality',
-  'appeals': 'attractive qualities',
-  'repeal': 'cancel or remove',
-  'repeals': 'cancels',
-  'repealed': 'canceled',
-  'repealing': 'canceling',
-  'repeal': 'cancellation',
-  'repeals': 'cancellations',
-  'conceal': 'hide',
-  'conceals': 'hides',
-  'concealed': 'hid',
-  'concealing': 'hiding',
-  'concealment': 'hiding',
-  'congeal': 'freeze or coagulate',
-  'congeals': 'freezes',
-  'congealed': 'froze',
-  'congealing': 'freezing',
+// ─── Conversion Data ──────────────────────────────────────────────────────────
+const CATEGORIES = {
+  length: {
+    label: '📏 Length', group: 'everyday',
+    base: 'meter',
+    units: {
+      meter:       { label: 'Meter (m)',           factor: 1 },
+      kilometer:   { label: 'Kilometer (km)',       factor: 1000 },
+      centimeter:  { label: 'Centimeter (cm)',      factor: 0.01 },
+      millimeter:  { label: 'Millimeter (mm)',      factor: 0.001 },
+      mile:        { label: 'Mile (mi)',            factor: 1609.344 },
+      yard:        { label: 'Yard (yd)',            factor: 0.9144 },
+      foot:        { label: 'Foot (ft)',            factor: 0.3048 },
+      inch:        { label: 'Inch (in)',            factor: 0.0254 },
+      nautical:    { label: 'Nautical Mile (nmi)',  factor: 1852 },
+      light_year:  { label: 'Light Year (ly)',      factor: 9.461e15 },
+      micrometer:  { label: 'Micrometer (μm)',      factor: 0.000001 },
+    },
+  },
+  weight: {
+    label: '⚖️ Weight', group: 'everyday',
+    base: 'kilogram',
+    units: {
+      kilogram:  { label: 'Kilogram (kg)',  factor: 1 },
+      gram:      { label: 'Gram (g)',       factor: 0.001 },
+      milligram: { label: 'Milligram (mg)', factor: 0.000001 },
+      pound:     { label: 'Pound (lb)',     factor: 0.453592 },
+      ounce:     { label: 'Ounce (oz)',     factor: 0.0283495 },
+      stone:     { label: 'Stone (st)',     factor: 6.35029 },
+      tonne:     { label: 'Metric Ton (t)', factor: 1000 },
+      us_ton:    { label: 'US Ton',         factor: 907.185 },
+      microgram: { label: 'Microgram (μg)', factor: 0.000000001 },
+    },
+  },
+  temperature: {
+    label: '🌡️ Temperature', group: 'everyday',
+    base: 'celsius', special: true,
+    units: {
+      celsius:    { label: 'Celsius (°C)' },
+      fahrenheit: { label: 'Fahrenheit (°F)' },
+      kelvin:     { label: 'Kelvin (K)' },
+      rankine:    { label: 'Rankine (°R)' },
+    },
+  },
+  volume: {
+    label: '🧪 Volume', group: 'everyday',
+    base: 'liter',
+    units: {
+      liter:      { label: 'Liter (L)',            factor: 1 },
+      milliliter: { label: 'Milliliter (mL)',       factor: 0.001 },
+      gallon_us:  { label: 'Gallon (US)',           factor: 3.78541 },
+      gallon_uk:  { label: 'Gallon (UK)',           factor: 4.54609 },
+      cup:        { label: 'Cup (US)',              factor: 0.236588 },
+      pint_us:    { label: 'Pint (US)',             factor: 0.473176 },
+      pint_uk:    { label: 'Pint (UK)',             factor: 0.568261 },
+      fluid_oz:   { label: 'Fluid Ounce (US)',      factor: 0.0295735 },
+      tablespoon: { label: 'Tablespoon (US)',       factor: 0.0147868 },
+      teaspoon:   { label: 'Teaspoon (US)',         factor: 0.00492892 },
+      cubic_m:    { label: 'Cubic Meter (m³)',      factor: 1000 },
+      cubic_cm:   { label: 'Cubic Centimeter (cc)', factor: 0.001 },
+    },
+  },
+  speed: {
+    label: '🚀 Speed', group: 'everyday',
+    base: 'mps',
+    units: {
+      mps:  { label: 'Meter/second (m/s)',    factor: 1 },
+      kph:  { label: 'Kilometer/hour (km/h)', factor: 0.277778 },
+      mph:  { label: 'Mile/hour (mph)',        factor: 0.44704 },
+      knot: { label: 'Knot (kn)',             factor: 0.514444 },
+      fps:  { label: 'Foot/second (fps)',      factor: 0.3048 },
+      mach: { label: 'Mach',                  factor: 340.29 },
+    },
+  },
+  area: {
+    label: '🗺️ Area', group: 'everyday',
+    base: 'sqm',
+    units: {
+      sqm:     { label: 'Square Meter (m²)',      factor: 1 },
+      sqkm:    { label: 'Square Kilometer (km²)', factor: 1e6 },
+      sqmile:  { label: 'Square Mile (mi²)',      factor: 2589988.1 },
+      sqyard:  { label: 'Square Yard (yd²)',      factor: 0.836127 },
+      sqfoot:  { label: 'Square Foot (ft²)',      factor: 0.092903 },
+      sqinch:  { label: 'Square Inch (in²)',      factor: 0.00064516 },
+      hectare: { label: 'Hectare (ha)',           factor: 10000 },
+      acre:    { label: 'Acre',                  factor: 4046.86 },
+    },
+  },
+  time: {
+    label: '⏱️ Time', group: 'everyday',
+    base: 'second',
+    units: {
+      microsecond: { label: 'Microsecond (μs)', factor: 0.000001 },
+      millisecond: { label: 'Millisecond (ms)', factor: 0.001 },
+      second:      { label: 'Second (s)',        factor: 1 },
+      minute:      { label: 'Minute (min)',      factor: 60 },
+      hour:        { label: 'Hour (hr)',         factor: 3600 },
+      day:         { label: 'Day',              factor: 86400 },
+      week:        { label: 'Week',             factor: 604800 },
+      month:       { label: 'Month (avg)',       factor: 2628000 },
+      year:        { label: 'Year',             factor: 31536000 },
+      decade:      { label: 'Decade',           factor: 315360000 },
+    },
+  },
+  cooking: {
+    label: '🍳 Cooking', group: 'everyday',
+    base: 'ml',
+    units: {
+      ml:         { label: 'Milliliter (mL)',    factor: 1 },
+      liter:      { label: 'Liter (L)',          factor: 1000 },
+      tsp:        { label: 'Teaspoon (tsp)',     factor: 4.92892 },
+      tbsp:       { label: 'Tablespoon (tbsp)',  factor: 14.7868 },
+      fl_oz:      { label: 'Fluid Ounce (fl oz)',factor: 29.5735 },
+      cup_us:     { label: 'Cup (US)',           factor: 236.588 },
+      cup_metric: { label: 'Cup (Metric)',       factor: 250 },
+      pint:       { label: 'Pint (US)',          factor: 473.176 },
+      quart:      { label: 'Quart (US)',         factor: 946.353 },
+      gallon:     { label: 'Gallon (US)',        factor: 3785.41 },
+    },
+  },
+  data: {
+    label: '💾 Data Storage', group: 'tech',
+    base: 'byte',
+    units: {
+      bit:      { label: 'Bit (b)',         factor: 0.125 },
+      byte:     { label: 'Byte (B)',        factor: 1 },
+      kilobyte: { label: 'Kilobyte (KB)',   factor: 1024 },
+      megabyte: { label: 'Megabyte (MB)',   factor: 1048576 },
+      gigabyte: { label: 'Gigabyte (GB)',   factor: 1073741824 },
+      terabyte: { label: 'Terabyte (TB)',   factor: 1099511627776 },
+      petabyte: { label: 'Petabyte (PB)',   factor: 1.126e15 },
+      gibibyte: { label: 'Gibibyte (GiB)',  factor: 1073741824 },
+    },
+  },
+  frequency: {
+    label: '📡 Frequency', group: 'tech',
+    base: 'hz',
+    units: {
+      hz:  { label: 'Hertz (Hz)',      factor: 1 },
+      khz: { label: 'Kilohertz (kHz)', factor: 1000 },
+      mhz: { label: 'Megahertz (MHz)', factor: 1000000 },
+      ghz: { label: 'Gigahertz (GHz)', factor: 1e9 },
+      thz: { label: 'Terahertz (THz)', factor: 1e12 },
+      rpm: { label: 'RPM',            factor: 0.016667 },
+    },
+  },
+  typography: {
+    label: '🖥️ Typography', group: 'tech',
+    base: 'px',
+    units: {
+      px:   { label: 'Pixel (px)',       factor: 1 },
+      pt:   { label: 'Point (pt)',       factor: 1.333333 },
+      em:   { label: 'Em (em)',          factor: 16 },
+      rem:  { label: 'Rem (rem)',        factor: 16 },
+      cm:   { label: 'Centimeter (cm)',  factor: 37.7953 },
+      mm:   { label: 'Millimeter (mm)',  factor: 3.77953 },
+      inch: { label: 'Inch (in)',        factor: 96 },
+    },
+  },
+  numbersys: {
+    label: '🔢 Number Systems', group: 'tech',
+    special: true, base: 'decimal',
+    units: {
+      decimal: { label: 'Decimal (Base 10)' },
+      binary:  { label: 'Binary (Base 2)' },
+      octal:   { label: 'Octal (Base 8)' },
+      hex:     { label: 'Hexadecimal (Base 16)' },
+    },
+  },
+  energy: {
+    label: '⚡ Energy', group: 'science',
+    base: 'joule',
+    units: {
+      joule:       { label: 'Joule (J)',           factor: 1 },
+      kilojoule:   { label: 'Kilojoule (kJ)',      factor: 1000 },
+      calorie:     { label: 'Calorie (cal)',       factor: 4.184 },
+      kilocalorie: { label: 'Kilocalorie (kcal)',  factor: 4184 },
+      wh:          { label: 'Watt-hour (Wh)',      factor: 3600 },
+      kwh:         { label: 'Kilowatt-hour (kWh)', factor: 3600000 },
+      btu:         { label: 'BTU',                factor: 1055.06 },
+      ev:          { label: 'Electronvolt (eV)',   factor: 1.602e-19 },
+    },
+  },
+  pressure: {
+    label: '🔵 Pressure', group: 'science',
+    base: 'pascal',
+    units: {
+      pascal:     { label: 'Pascal (Pa)',        factor: 1 },
+      kilopascal: { label: 'Kilopascal (kPa)',   factor: 1000 },
+      megapascal: { label: 'Megapascal (MPa)',   factor: 1000000 },
+      bar:        { label: 'Bar',               factor: 100000 },
+      psi:        { label: 'PSI (lb/in²)',       factor: 6894.76 },
+      atm:        { label: 'Atmosphere (atm)',   factor: 101325 },
+      mmhg:       { label: 'mmHg (Torr)',        factor: 133.322 },
+      inhg:       { label: 'inHg',              factor: 3386.39 },
+    },
+  },
+  power: {
+    label: '💡 Power', group: 'science',
+    base: 'watt',
+    units: {
+      watt:       { label: 'Watt (W)',           factor: 1 },
+      kilowatt:   { label: 'Kilowatt (kW)',      factor: 1000 },
+      megawatt:   { label: 'Megawatt (MW)',      factor: 1000000 },
+      horsepower: { label: 'Horsepower (hp)',    factor: 745.7 },
+      hp_metric:  { label: 'Horsepower (metric)',factor: 735.499 },
+      btu_hr:     { label: 'BTU/hour',          factor: 0.29307 },
+    },
+  },
+  force: {
+    label: '🏋️ Force', group: 'science',
+    base: 'newton',
+    units: {
+      newton:     { label: 'Newton (N)',          factor: 1 },
+      kilonewton: { label: 'Kilonewton (kN)',     factor: 1000 },
+      dyne:       { label: 'Dyne',               factor: 0.00001 },
+      pound_f:    { label: 'Pound-force (lbf)',  factor: 4.44822 },
+      kgf:        { label: 'Kilogram-force (kgf)',factor: 9.80665 },
+      ounce_f:    { label: 'Ounce-force (ozf)',  factor: 0.278014 },
+    },
+  },
+  angle: {
+    label: '📐 Angle', group: 'science',
+    base: 'degree',
+    units: {
+      degree:    { label: 'Degree (°)',        factor: 1 },
+      radian:    { label: 'Radian (rad)',      factor: 57.2958 },
+      gradian:   { label: 'Gradian (gon)',     factor: 0.9 },
+      arcminute: { label: "Arcminute (')",     factor: 0.016667 },
+      arcsecond: { label: 'Arcsecond (")',     factor: 0.000278 },
+      turn:      { label: 'Turn (revolution)', factor: 360 },
+    },
+  },
+  torque: {
+    label: '🔩 Torque', group: 'automotive',
+    base: 'nm',
+    units: {
+      nm:     { label: 'Newton-meter (Nm)',  factor: 1 },
+      ft_lb:  { label: 'Foot-pound (ft·lb)', factor: 1.35582 },
+      in_lb:  { label: 'Inch-pound (in·lb)', factor: 0.112985 },
+      kgf_m:  { label: 'kgf·m',            factor: 9.80665 },
+      kgf_cm: { label: 'kgf·cm',           factor: 0.0980665 },
+    },
+  },
+  fuel: {
+    label: '⛽ Fuel Economy', group: 'automotive',
+    base: 'l100km', special: true,
+    units: {
+      l100km: { label: 'Liters/100km (L/100km)' },
+      kml:    { label: 'Kilometers/liter (km/L)' },
+      mpg_us: { label: 'Miles/gallon US (mpg)' },
+      mpg_uk: { label: 'Miles/gallon UK (mpg)' },
+    },
+  },
 };
 
-const WordUnscrambler = () => {
-  const [input, setText] = useState('');
-  const [showFilters, setShowFilters] = useState(false);
-  const [exactLength, setExactLength] = useState('');
-  const [useExactLength, setUseExactLength] = useState(false);
-  const [startsWith, setStartsWith] = useState('');
-  const [useStartsWith, setUseStartsWith] = useState(false);
-  const [endsWith, setEndsWith] = useState('');
-  const [useEndsWith, setUseEndsWith] = useState(false);
-  const [lockPositions, setLockPositions] = useState(false);
-  const [lockedLetters, setLockedLetters] = useState({});
+const GROUPS = {
+  everyday:   { label: '🏠 Everyday',  color: '#2563eb' },
+  tech:       { label: '💻 Tech',       color: '#7c3aed' },
+  science:    { label: '🔬 Science',    color: '#059669' },
+  automotive: { label: '🚗 Automotive', color: '#dc2626' },
+};
 
-  // Generate anagrams
-  const generateAnagrams = (letters) => {
-    const cleaned = letters.toLowerCase().replace(/[^a-z]/g, '');
-    if (cleaned.length === 0) return [];
+function convert(value, from, to, catKey) {
+  if (value === '' || value === null || value === undefined) return '';
+  const cat = CATEGORIES[catKey];
+  if (catKey === 'temperature') {
+    const v = parseFloat(value); if (isNaN(v)) return '';
+    let c;
+    if (from === 'celsius')    c = v;
+    if (from === 'fahrenheit') c = (v - 32) * 5 / 9;
+    if (from === 'kelvin')     c = v - 273.15;
+    if (from === 'rankine')    c = (v - 491.67) * 5 / 9;
+    if (to === 'celsius')    return round(c);
+    if (to === 'fahrenheit') return round(c * 9 / 5 + 32);
+    if (to === 'kelvin')     return round(c + 273.15);
+    if (to === 'rankine')    return round((c + 273.15) * 9 / 5);
+  }
+  if (catKey === 'fuel') {
+    const v = parseFloat(value); if (isNaN(v) || v === 0) return '';
+    let l100;
+    if (from === 'l100km') l100 = v;
+    if (from === 'kml')    l100 = 100 / v;
+    if (from === 'mpg_us') l100 = 235.214 / v;
+    if (from === 'mpg_uk') l100 = 282.481 / v;
+    if (to === 'l100km')  return round(l100);
+    if (to === 'kml')     return round(100 / l100);
+    if (to === 'mpg_us')  return round(235.214 / l100);
+    if (to === 'mpg_uk')  return round(282.481 / l100);
+  }
+  if (catKey === 'numbersys') {
+    const str = String(value).trim(); if (!str) return '';
+    try {
+      let decimal;
+      if (from === 'decimal') decimal = parseInt(str, 10);
+      if (from === 'binary')  decimal = parseInt(str, 2);
+      if (from === 'octal')   decimal = parseInt(str, 8);
+      if (from === 'hex')     decimal = parseInt(str, 16);
+      if (isNaN(decimal)) return 'Invalid';
+      if (to === 'decimal') return decimal.toString(10);
+      if (to === 'binary')  return decimal.toString(2);
+      if (to === 'octal')   return decimal.toString(8);
+      if (to === 'hex')     return decimal.toString(16).toUpperCase();
+    } catch { return 'Invalid'; }
+  }
+  const v = parseFloat(value); if (isNaN(v)) return '';
+  const units = cat.units;
+  const base = v * units[from].factor;
+  return round(base / units[to].factor);
+}
 
-    const results = [];
-    const frequency = {};
+function round(n) {
+  if (Math.abs(n) >= 1e12 || (Math.abs(n) < 1e-6 && n !== 0)) return parseFloat(n.toExponential(6));
+  const r = parseFloat(n.toPrecision(8));
+  return r % 1 === 0 ? r : parseFloat(r.toFixed(8).replace(/\.?0+$/, ''));
+}
 
-    // Count letter frequencies
-    for (const letter of cleaned) {
-      frequency[letter] = (frequency[letter] || 0) + 1;
-    }
+const QUICK = [
+  { cat: 'length',      from: 'centimeter',  to: 'inch',       label: 'cm → in' },
+  { cat: 'length',      from: 'kilometer',   to: 'mile',       label: 'km → mi' },
+  { cat: 'weight',      from: 'kilogram',    to: 'pound',      label: 'kg → lb' },
+  { cat: 'temperature', from: 'celsius',     to: 'fahrenheit', label: '°C → °F' },
+  { cat: 'temperature', from: 'fahrenheit',  to: 'celsius',    label: '°F → °C' },
+  { cat: 'data',        from: 'gigabyte',    to: 'megabyte',   label: 'GB → MB' },
+  { cat: 'data',        from: 'megabyte',    to: 'gigabyte',   label: 'MB → GB' },
+  { cat: 'energy',      from: 'kilocalorie', to: 'kilojoule',  label: 'kcal → kJ' },
+  { cat: 'pressure',    from: 'psi',         to: 'bar',        label: 'PSI → bar' },
+  { cat: 'fuel',        from: 'mpg_us',      to: 'l100km',     label: 'mpg → L/100km' },
+  { cat: 'cooking',     from: 'cup_us',      to: 'ml',         label: 'cup → mL' },
+  { cat: 'cooking',     from: 'tbsp',        to: 'ml',         label: 'tbsp → mL' },
+  { cat: 'angle',       from: 'degree',      to: 'radian',     label: 'deg → rad' },
+  { cat: 'power',       from: 'kilowatt',    to: 'horsepower', label: 'kW → hp' },
+  { cat: 'torque',      from: 'nm',          to: 'ft_lb',      label: 'Nm → ft·lb' },
+  { cat: 'numbersys',   from: 'decimal',     to: 'binary',     label: 'Dec → Bin' },
+  { cat: 'numbersys',   from: 'decimal',     to: 'hex',        label: 'Dec → Hex' },
+];
 
-    // Check each word in dictionary
-    for (const word of Object.keys(WORD_DEFINITIONS)) {
-      if (word.length > cleaned.length) continue;
+export default function UnitConverter() {
+  const [category, setCategory]       = useState('length');
+  const [from, setFrom]               = useState('centimeter');
+  const [to, setTo]                   = useState('inch');
+  const [input, setInput]             = useState('');
+  const [copied, setCopied]           = useState(false);
+  const [activeGroup, setActiveGroup] = useState('everyday');
 
-      const wordFreq = {};
-      for (const letter of word) {
-        wordFreq[letter] = (wordFreq[letter] || 0) + 1;
-      }
+  const cat    = CATEGORIES[category];
+  const units  = cat.units;
+  const output = convert(input, from, to, category);
 
-      let isAnagram = true;
-      for (const letter in wordFreq) {
-        if ((frequency[letter] || 0) < wordFreq[letter]) {
-          isAnagram = false;
-          break;
-        }
-      }
-
-      if (isAnagram) {
-        results.push(word);
-      }
-    }
-
-    // Sort by length (longer first), then alphabetically
-    return results.sort((a, b) => b.length - a.length || a.localeCompare(b));
+  const handleCategoryChange = (key) => {
+    setCategory(key);
+    const keys = Object.keys(CATEGORIES[key].units);
+    setFrom(keys[0]); setTo(keys[1]); setInput('');
+  };
+  const handleSwap = () => { setFrom(to); setTo(from); setInput(output !== '' ? String(output) : ''); };
+  const handleQuick = (q) => { setCategory(q.cat); setActiveGroup(CATEGORIES[q.cat].group); setFrom(q.from); setTo(q.to); setInput(''); };
+  const handleCopy = () => {
+    if (output === '') return;
+    navigator.clipboard.writeText(String(output)).then(() => { setCopied(true); setTimeout(() => setCopied(false), 2000); });
   };
 
-  // Apply all filters
-  const filteredResults = useMemo(() => {
-    let results = generateAnagrams(input);
+  const groupCats  = Object.entries(CATEGORIES).filter(([, v]) => v.group === activeGroup);
+  const groupColor = GROUPS[activeGroup]?.color || '#2563eb';
+  const font       = 'Inter, -apple-system, BlinkMacSystemFont, sans-serif';
+  const isNumberSys = category === 'numbersys';
 
-    // Exact length filter
-    if (useExactLength && exactLength) {
-      const len = parseInt(exactLength);
-      results = results.filter(word => word.length === len);
-    }
-
-    // Starts with filter
-    if (useStartsWith && startsWith) {
-      const firstLetter = startsWith.toLowerCase()[0];
-      results = results.filter(word => word[0] === firstLetter);
-    }
-
-    // Ends with filter
-    if (useEndsWith && endsWith) {
-      const lastLetter = endsWith.toLowerCase()[0];
-      results = results.filter(word => word[word.length - 1] === lastLetter);
-    }
-
-    // Lock positions filter
-    if (lockPositions && Object.keys(lockedLetters).length > 0) {
-      results = results.filter(word => {
-        for (const [pos, letter] of Object.entries(lockedLetters)) {
-          if (word[parseInt(pos)] !== letter.toLowerCase()) {
-            return false;
-          }
-        }
-        return true;
-      });
-    }
-
-    return results;
-  }, [input, useExactLength, exactLength, useStartsWith, startsWith, useEndsWith, endsWith, lockPositions, lockedLetters]);
-
-  const handleLockPosition = (pos, letter) => {
-    if (letter === '') {
-      const newLocked = { ...lockedLetters };
-      delete newLocked[pos];
-      setLockedLetters(newLocked);
-    } else {
-      setLockedLetters({ ...lockedLetters, [pos]: letter.toUpperCase() });
-    }
+  const S = {
+    page:       { minHeight: '100vh', background: '#f8fafc', fontFamily: font, padding: '0 0 80px' },
+    nav:        { background: '#0f172a', padding: '14px 20px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' },
+    navBrand:   { color: 'white', fontWeight: 700, fontSize: 18, textDecoration: 'none' },
+    navLink:    { color: '#94a3b8', fontSize: 13, textDecoration: 'none' },
+    hero:       { background: `linear-gradient(135deg, #0f172a 0%, ${groupColor} 100%)`, padding: '36px 20px 28px', textAlign: 'center', transition: 'background 0.4s' },
+    heroTitle:  { color: 'white', fontSize: 28, fontWeight: 800, margin: '0 0 6px' },
+    heroSub:    { color: '#bfdbfe', fontSize: 13, margin: 0 },
+    wrap:       { maxWidth: 680, margin: '0 auto', padding: '0 16px' },
+    groupRow:   { display: 'flex', gap: 8, padding: '18px 0 4px', overflowX: 'auto', scrollbarWidth: 'none' },
+    catRow:     { display: 'flex', gap: 6, padding: '8px 0 12px', overflowX: 'auto', scrollbarWidth: 'none' },
+    card:       { background: 'white', borderRadius: 16, boxShadow: '0 4px 24px rgba(0,0,0,0.08)', padding: 24, marginBottom: 20 },
+    ioRow:      { display: 'grid', gridTemplateColumns: '1fr auto 1fr', gap: 12, alignItems: 'end', marginBottom: 16 },
+    fieldLabel: { fontSize: 12, fontWeight: 600, color: '#64748b', marginBottom: 6 },
+    select:     { width: '100%', padding: '10px 12px', borderRadius: 10, border: '1.5px solid #e2e8f0', fontSize: 14, color: '#0f172a', background: 'white', cursor: 'pointer', outline: 'none', appearance: 'none', backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%2364748b' d='M6 8L1 3h10z'/%3E%3C/svg%3E")`, backgroundRepeat: 'no-repeat', backgroundPosition: 'right 10px center', paddingRight: 32 },
+    inputField: { width: '100%', padding: '12px 14px', borderRadius: 10, border: `1.5px solid ${groupColor}`, fontSize: 18, fontWeight: 600, color: '#0f172a', outline: 'none', boxSizing: 'border-box', background: '#f0f9ff', marginTop: 8 },
+    outputBox:  { padding: '12px 14px', borderRadius: 10, marginTop: 8, border: '1.5px solid #e2e8f0', fontSize: 18, fontWeight: 700, color: groupColor, background: '#f8fafc', minHeight: 48, display: 'flex', alignItems: 'center' },
+    swapBtn:    { width: 40, height: 40, borderRadius: '50%', background: '#f1f5f9', border: '1.5px solid #e2e8f0', cursor: 'pointer', fontSize: 18, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, alignSelf: 'center', marginTop: 20 },
+    resultRow:  { background: '#f1f5f9', borderRadius: 10, padding: '12px 16px', fontSize: 14, color: '#475569', textAlign: 'center', marginBottom: 12 },
+    copyBtn:    { width: '100%', padding: '11px 0', background: output !== '' ? groupColor : '#e2e8f0', color: output !== '' ? 'white' : '#94a3b8', border: 'none', borderRadius: 10, fontWeight: 600, fontSize: 14, cursor: output !== '' ? 'pointer' : 'default' },
+    sectionTitle:{ fontSize: 12, fontWeight: 700, color: '#94a3b8', marginBottom: 10, letterSpacing: 1 },
+    quickGrid:  { display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 },
+    quickBtn:   { padding: '10px 14px', borderRadius: 10, border: '1.5px solid #e2e8f0', background: 'white', fontSize: 13, fontWeight: 600, color: '#334155', cursor: 'pointer', textAlign: 'left' },
+    footer:     { textAlign: 'center', marginTop: 32, fontSize: 13, color: '#94a3b8' },
   };
 
-  const toggleLockPositions = () => {
-    setLockPositions(!lockPositions);
-    if (!lockPositions) {
-      setLockedLetters({});
-    }
-  };
-
-  const inputLength = input.replace(/[^a-z]/gi, '').length;
+  const groupTabStyle = (key) => ({ padding: '8px 18px', borderRadius: 20, border: 'none', background: activeGroup === key ? GROUPS[key].color : 'white', color: activeGroup === key ? 'white' : '#475569', fontWeight: 600, fontSize: 13, cursor: 'pointer', whiteSpace: 'nowrap', boxShadow: '0 1px 4px rgba(0,0,0,0.08)', flexShrink: 0 });
+  const catTabStyle   = (key) => ({ padding: '6px 14px', borderRadius: 16, border: 'none', background: category === key ? groupColor : '#f1f5f9', color: category === key ? 'white' : '#64748b', fontWeight: 600, fontSize: 12, cursor: 'pointer', whiteSpace: 'nowrap', flexShrink: 0 });
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#f9f7f2] to-[#f5f1e8] p-6">
-      <div className="max-w-2xl mx-auto">
-        {/* Header */}
-        <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold text-gray-900 mb-2" style={{ fontFamily: 'Inter, sans-serif' }}>
-            Word Unscrambler
-          </h1>
-          <p className="text-gray-600" style={{ fontFamily: 'Inter, sans-serif' }}>
-            Find words from scrambled letters • 100% private • No sign-up required
-          </p>
+    <div style={S.page}>
+      <nav style={S.nav}>
+        <a href="https://tabutility.com" style={S.navBrand}>🔧 Tabutility</a>
+        <a href="https://tabutility.com" style={S.navLink}>← All Tools</a>
+      </nav>
+      <div style={S.hero}>
+        <h1 style={S.heroTitle}>Unit Converter</h1>
+        <p style={S.heroSub}>19 categories · 150+ units · instant results · no sign-up</p>
+      </div>
+      <div style={S.wrap}>
+        <div style={S.groupRow}>
+          {Object.entries(GROUPS).map(([key, val]) => (
+            <button key={key} style={groupTabStyle(key)} onClick={() => {
+              setActiveGroup(key);
+              const first = Object.entries(CATEGORIES).find(([, v]) => v.group === key);
+              if (first) handleCategoryChange(first[0]);
+            }}>{val.label}</button>
+          ))}
         </div>
-
-        {/* Main Card */}
-        <div className="bg-white rounded-2xl shadow-lg p-8 mb-6">
-          {/* Input Section */}
-          <div className="mb-6">
-            <label className="block text-sm font-semibold text-gray-700 mb-3" style={{ fontFamily: 'Inter, sans-serif' }}>
-              Enter Letters
-            </label>
-            <input
-              type="text"
-              value={input}
-              onChange={(e) => setText(e.target.value)}
-              placeholder="Type or paste letters (e.g., ROAMS, SOLAR)"
-              className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:outline-none focus:border-blue-500 text-lg"
-              style={{ fontFamily: 'Inter, sans-serif' }}
-            />
-            <p className="text-sm text-gray-500 mt-2" style={{ fontFamily: 'Inter, sans-serif' }}>
-              {inputLength} letter{inputLength !== 1 ? 's' : ''} detected
-            </p>
+        <div style={S.catRow}>
+          {groupCats.map(([key, val]) => (
+            <button key={key} style={catTabStyle(key)} onClick={() => handleCategoryChange(key)}>{val.label}</button>
+          ))}
+        </div>
+        <div style={S.card}>
+          <div style={S.ioRow}>
+            <div>
+              <div style={S.fieldLabel}>FROM</div>
+              <select style={S.select} value={from} onChange={e => setFrom(e.target.value)}>
+                {Object.entries(units).map(([k, u]) => <option key={k} value={k}>{u.label}</option>)}
+              </select>
+              <input style={S.inputField} type={isNumberSys ? 'text' : 'number'} placeholder={isNumberSys ? 'Enter number' : 'Enter value'} value={input} onChange={e => setInput(e.target.value)} />
+            </div>
+            <button style={S.swapBtn} onClick={handleSwap}>⇄</button>
+            <div>
+              <div style={S.fieldLabel}>TO</div>
+              <select style={S.select} value={to} onChange={e => setTo(e.target.value)}>
+                {Object.entries(units).map(([k, u]) => <option key={k} value={k}>{u.label}</option>)}
+              </select>
+              <div style={S.outputBox}>
+                {output !== '' ? String(output) : <span style={{ color: '#cbd5e1' }}>Result</span>}
+              </div>
+            </div>
           </div>
-
-          {/* Filters Toggle */}
-          <button
-            onClick={() => setShowFilters(!showFilters)}
-            className="w-full mb-4 px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-lg flex items-center justify-between transition-colors"
-            style={{ fontFamily: 'Inter, sans-serif' }}
-          >
-            <span className="font-semibold text-gray-700">Filter Results</span>
-            <span className="text-gray-600 text-xl">{showFilters ? '▲' : '▼'}</span>
-          </button>
-
-          {/* Filters Section */}
-          {showFilters && (
-            <div className="mb-6 p-4 bg-gray-50 rounded-lg border border-gray-200">
-              {/* Exact Length Filter */}
-              <div className="mb-4 flex items-center gap-3">
-                <input
-                  type="checkbox"
-                  id="exactLength"
-                  checked={useExactLength}
-                  onChange={(e) => setUseExactLength(e.target.checked)}
-                  className="w-5 h-5 rounded cursor-pointer accent-blue-500"
-                />
-                <label htmlFor="exactLength" className="flex-1 text-sm font-medium text-gray-700" style={{ fontFamily: 'Inter, sans-serif' }}>
-                  Exact Length
-                </label>
-                <input
-                  type="number"
-                  value={exactLength}
-                  onChange={(e) => setExactLength(e.target.value)}
-                  disabled={!useExactLength}
-                  min="2"
-                  max="15"
-                  placeholder="2-15"
-                  className="w-20 px-2 py-1 border border-gray-300 rounded text-sm disabled:bg-gray-100"
-                  style={{ fontFamily: 'Inter, sans-serif' }}
-                />
-              </div>
-
-              {/* Starts With Filter */}
-              <div className="mb-4 flex items-center gap-3">
-                <input
-                  type="checkbox"
-                  id="startsWith"
-                  checked={useStartsWith}
-                  onChange={(e) => setUseStartsWith(e.target.checked)}
-                  className="w-5 h-5 rounded cursor-pointer accent-blue-500"
-                />
-                <label htmlFor="startsWith" className="flex-1 text-sm font-medium text-gray-700" style={{ fontFamily: 'Inter, sans-serif' }}>
-                  Starts With
-                </label>
-                <input
-                  type="text"
-                  value={startsWith}
-                  onChange={(e) => setStartsWith(e.target.value.slice(0, 1))}
-                  disabled={!useStartsWith}
-                  maxLength="1"
-                  placeholder="A"
-                  className="w-20 px-2 py-1 border border-gray-300 rounded text-sm uppercase disabled:bg-gray-100"
-                  style={{ fontFamily: 'Inter, sans-serif' }}
-                />
-              </div>
-
-              {/* Ends With Filter */}
-              <div className="mb-4 flex items-center gap-3">
-                <input
-                  type="checkbox"
-                  id="endsWith"
-                  checked={useEndsWith}
-                  onChange={(e) => setUseEndsWith(e.target.checked)}
-                  className="w-5 h-5 rounded cursor-pointer accent-blue-500"
-                />
-                <label htmlFor="endsWith" className="flex-1 text-sm font-medium text-gray-700" style={{ fontFamily: 'Inter, sans-serif' }}>
-                  Ends With
-                </label>
-                <input
-                  type="text"
-                  value={endsWith}
-                  onChange={(e) => setEndsWith(e.target.value.slice(0, 1))}
-                  disabled={!useEndsWith}
-                  maxLength="1"
-                  placeholder="E"
-                  className="w-20 px-2 py-1 border border-gray-300 rounded text-sm uppercase disabled:bg-gray-100"
-                  style={{ fontFamily: 'Inter, sans-serif' }}
-                />
-              </div>
-
-              {/* Lock Positions Toggle */}
-              <div className="flex items-center gap-3 pt-2 border-t border-gray-200">
-                <button
-                  onClick={toggleLockPositions}
-                  className={`px-3 py-1 rounded-lg font-bold text-lg transition-colors ${lockPositions ? 'bg-blue-100 text-blue-600' : 'bg-gray-100 text-gray-600'}`}
-                >
-                  {lockPositions ? '🔒' : '🔓'}
-                </button>
-                <span className="text-sm font-medium text-gray-700" style={{ fontFamily: 'Inter, sans-serif' }}>
-                  Lock Positions (Wordle/Scrabble)
-                </span>
-              </div>
-
-              {/* Position Lock Grid */}
-              {lockPositions && inputLength > 0 && (
-                <div className="mt-4 p-3 bg-white rounded border border-gray-200">
-                  <p className="text-xs font-semibold text-gray-600 mb-2" style={{ fontFamily: 'Inter, sans-serif' }}>
-                    Click boxes to lock letters in positions:
-                  </p>
-                  <div className="flex gap-2 flex-wrap">
-                    {Array.from({ length: inputLength }).map((_, idx) => (
-                      <div key={idx} className="flex flex-col items-center gap-1">
-                        <input
-                          type="text"
-                          maxLength="1"
-                          value={lockedLetters[idx] || ''}
-                          onChange={(e) => handleLockPosition(idx, e.target.value)}
-                          className="w-10 h-10 text-center text-lg font-bold border-2 border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 uppercase"
-                          placeholder="?"
-                          style={{ fontFamily: 'Inter, sans-serif' }}
-                        />
-                        <span className="text-xs text-gray-500">{idx + 1}</span>
-                      </div>
-                    ))}
-                  </div>
-                  <button
-                    onClick={() => setLockedLetters({})}
-                    className="mt-2 text-xs text-blue-600 hover:text-blue-700 font-medium"
-                    style={{ fontFamily: 'Inter, sans-serif' }}
-                  >
-                    Clear All
-                  </button>
-                </div>
-              )}
+          {output !== '' && input !== '' && (
+            <div style={S.resultRow}>
+              <strong>{input} {units[from]?.label?.split(' ')[0]}</strong>
+              {' = '}
+              <strong style={{ color: groupColor }}>{output} {units[to]?.label?.split(' ')[0]}</strong>
             </div>
           )}
+          <button style={S.copyBtn} onClick={handleCopy}>{copied ? '✓ Copied!' : 'Copy Result'}</button>
         </div>
-
-        {/* Results Section */}
-        <div className="bg-white rounded-2xl shadow-lg p-8">
-          <div className="mb-4">
-            <h2 className="text-lg font-bold text-gray-900" style={{ fontFamily: 'Inter, sans-serif' }}>
-              Results {filteredResults.length > 0 && <span className="text-blue-500">({filteredResults.length})</span>}
-            </h2>
-          </div>
-
-          {input.trim() === '' ? (
-            <p className="text-gray-500 text-center py-8" style={{ fontFamily: 'Inter, sans-serif' }}>
-              Enter letters above to find words
-            </p>
-          ) : filteredResults.length === 0 ? (
-            <p className="text-gray-500 text-center py-8" style={{ fontFamily: 'Inter, sans-serif' }}>
-              No words found with these filters
-            </p>
-          ) : (
-            <div className="space-y-2 max-h-96 overflow-y-auto">
-              {filteredResults.map((word, idx) => (
-                <div key={idx} className="p-3 bg-gradient-to-r from-blue-50 to-transparent rounded-lg border-l-4 border-blue-500 hover:bg-blue-100 transition-colors">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <p className="text-lg font-bold text-gray-900 uppercase" style={{ fontFamily: 'Inter, sans-serif' }}>
-                        {word}
-                      </p>
-                      <p className="text-sm text-gray-600" style={{ fontFamily: 'Inter, sans-serif' }}>
-                        {WORD_DEFINITIONS[word] || 'Definition not available'} • {word.length} letter{word.length !== 1 ? 's' : ''}
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          )}
+        <div style={S.sectionTitle}>QUICK CONVERSIONS</div>
+        <div style={S.quickGrid}>
+          {QUICK.map((q, i) => (
+            <button key={i} style={S.quickBtn} onClick={() => handleQuick(q)}>{q.label}</button>
+          ))}
         </div>
-
-        {/* Footer */}
-        <div className="mt-8 text-center text-sm text-gray-600" style={{ fontFamily: 'Inter, sans-serif' }}>
-          <p>✓ All processing happens on your device • No data is stored or shared</p>
+        <div style={S.footer}>
+          ✓ Free · No sign-up · 19 categories · 150+ units<br />
+          <a href="https://tabutility.com" style={{ color: '#94a3b8' }}>tabutility.com</a>
         </div>
       </div>
     </div>
   );
-};
-
-export default WordUnscrambler;
+}
