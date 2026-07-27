@@ -1,62 +1,313 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Unit Converter — Tabutility</title>
+<meta name="description" content="Free unit converter. Convert length, weight, temperature, area, volume, speed and more instantly."/>
+<meta name="keywords" content="unit converter, length converter, weight converter, temperature converter, metric to imperial"/>
+<link rel="canonical" href="https://unit-converter.tabutility.com/"/>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📏</text></svg>"/>
+<meta property="og:title" content="Unit Converter"/>
+<meta property="og:description" content="Free unit converter. Convert length, weight, temperature, area, volume and speed instantly."/>
+<meta property="og:url" content="https://unit-converter.tabutility.com/"/>
+<meta property="og:type" content="website"/>
+<meta property="og:site_name" content="Tabutility"/>
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Unit Converter"/>
+<meta name="twitter:description" content="Free unit converter. Convert length, weight, temperature, area, volume and speed instantly."/>
+<meta name="robots" content="index, follow"/>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-78VZWJ5B1W"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-78VZWJ5B1W');</script>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7039091592734005" crossorigin="anonymous"></script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"Unit Converter","url":"https://unit-converter.tabutility.com/","description":"Free unit converter. Convert length, weight, temperature, area, volume, speed and more instantly.","applicationCategory":"UtilitiesApplication","operatingSystem":"Any","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"provider":{"@type":"Organization","name":"Tabutility","url":"https://tabutility.com"}}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Tabutility","item":"https://tabutility.com"},{"@type":"ListItem","position":2,"name":"Converters","item":"https://tabutility.com"},{"@type":"ListItem","position":3,"name":"Unit Converter","item":"https://unit-converter.tabutility.com/"}]}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"What unit categories are supported?","acceptedAnswer":{"@type":"Answer","text":"Length, weight, temperature, area, volume and speed."}},{"@type":"Question","name":"Is the Unit Converter free?","acceptedAnswer":{"@type":"Answer","text":"Yes — completely free, no sign-up needed."}},{"@type":"Question","name":"Can I use the Unit Converter on mobile?","acceptedAnswer":{"@type":"Answer","text":"Yes — works on any device."}},{"@type":"Question","name":"How accurate are the conversions?","acceptedAnswer":{"@type":"Answer","text":"Conversions use precise standard conversion factors."}}]}</script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#0f172a;color:#f1f5f9;min-height:100vh}
+nav{background:#1e293b;border-bottom:1px solid #334155;padding:14px 24px;display:flex;align-items:center;gap:16px}
+nav a{color:#94a3b8;text-decoration:none;font-size:14px}nav a:hover{color:#f1f5f9}
+nav .brand{color:#38bdf8;font-weight:700;font-size:18px}
+.ad-banner{background:#1e293b;border-bottom:1px solid #334155;padding:4px;text-align:center}
+#app{max-width:820px;margin:8px auto;padding:0 16px 40px}
+h1{font-size:clamp(20px,4vw,28px);font-weight:800;margin:24px 0 6px;color:#f1f5f9}
+.subtitle{color:#94a3b8;font-size:14px;margin-bottom:20px}
+.cat-tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:20px}
+.cat-tab{background:#1e293b;border:1px solid #334155;border-radius:10px;color:#94a3b8;padding:8px 18px;font-size:13px;font-weight:600;cursor:pointer;transition:all .2s}
+.cat-tab.active{background:#38bdf8;border-color:#38bdf8;color:#0f172a}
+.card{background:#1e293b;border:1px solid #334155;border-radius:14px;padding:24px;margin-bottom:20px}
+.input-row{display:flex;gap:12px;align-items:flex-end;flex-wrap:wrap;margin-bottom:20px}
+.input-row > div{display:flex;flex-direction:column;gap:6px}
+label{font-size:13px;color:#94a3b8}
+input[type=number]{background:#0f172a;border:1px solid #334155;border-radius:10px;color:#f1f5f9;padding:12px 14px;font-size:18px;font-weight:700;width:200px;outline:none}
+input[type=number]:focus{border-color:#38bdf8}
+select{background:#0f172a;border:1px solid #334155;border-radius:10px;color:#f1f5f9;padding:12px 14px;font-size:14px;outline:none;min-width:160px}
+select:focus{border-color:#38bdf8}
+.results-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px}
+.result-card{background:#0f172a;border:1px solid #334155;border-radius:10px;padding:14px 16px;cursor:pointer;transition:all .2s}
+.result-card:hover{border-color:#38bdf8;background:#0a1628}
+.result-card.highlight{border-color:#38bdf8;background:#0a1628}
+.result-unit{font-size:11px;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px}
+.result-value{font-size:18px;font-weight:800;color:#38bdf8;word-break:break-all}
+.result-full{font-size:11px;color:#475569;margin-top:2px}
+.section-title{font-size:13px;font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:.05em;margin-bottom:14px}
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#22c55e;color:#fff;padding:10px 22px;border-radius:8px;font-size:14px;font-weight:600;opacity:0;transition:opacity .3s;pointer-events:none;z-index:999}
+.toast.show{opacity:1}
+</style>
+</head>
+<body>
+<nav><span class="brand">⚡ Tabutility</span><a href="https://tabutility.com">← All Tools</a></nav>
+<div class="ad-banner"><ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-7039091592734005" data-ad-slot="auto" data-ad-format="auto" data-full-width-responsive="true"></ins><script>(adsbygoogle=window.adsbygoogle||[]).push({});</script></div>
+<div id="app">
+  <h1>📏 Unit Converter</h1>
+  <p class="subtitle">Convert length, weight, temperature, area, volume and speed instantly. All conversions shown at once.</p>
 
-    <!-- Primary SEO -->
-    <title>Unit Converter — 19 Categories, 150+ Units Free Online | Tabutility</title>
-    <meta name="description" content="Free unit converter with 19 categories and 150+ units. Convert length, weight, temperature, volume, speed, data storage, energy, pressure, cooking, fuel economy, torque, angle and more. Instant results, no sign-up." />
-    <meta name="keywords" content="unit converter, length converter, weight converter, temperature converter, data storage converter, cooking converter, fuel economy converter, cm to inches, kg to lbs, celsius to fahrenheit, MB to GB, free unit converter" />
-    <link rel="canonical" href="https://unit-converter.tabutility.com/" />
+  <div class="cat-tabs" id="catTabs"></div>
 
-    <!-- Open Graph -->
-    <meta property="og:type"        content="website" />
-    <meta property="og:url"         content="https://unit-converter.tabutility.com/" />
-    <meta property="og:title"       content="Unit Converter — 19 Categories, 150+ Units Free" />
-    <meta property="og:description" content="Convert anything instantly. Length, weight, temperature, data storage, cooking, fuel economy, energy, pressure, torque and more. Free, no sign-up." />
-    <meta property="og:site_name"   content="Tabutility" />
+  <div class="card">
+    <div class="input-row">
+      <div>
+        <label>Value</label>
+        <input type="number" id="valueInput" value="1" oninput="convert()" step="any"/>
+      </div>
+      <div>
+        <label>From Unit</label>
+        <select id="fromUnit" onchange="convert()"></select>
+      </div>
+    </div>
+    <div class="section-title">All Conversions</div>
+    <div class="results-grid" id="resultsGrid"></div>
+  </div>
+</div>
 
-    <!-- Twitter Card -->
-    <meta name="twitter:card"        content="summary" />
-    <meta name="twitter:title"       content="Unit Converter — 19 Categories, 150+ Units Free" />
-    <meta name="twitter:description" content="Convert anything instantly. 19 categories, 150+ units. Free, no sign-up." />
+<div class="toast" id="toast">Copied!</div>
 
-    <!-- Favicon -->
-    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔄</text></svg>" />
+<div style="max-width:820px;margin-left:auto;margin-right:auto;margin-top:24px;margin-bottom:8px;padding:0 16px">
+  <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);border-radius:14px;padding:20px 24px">
+    <h2 style="font-size:15px;font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:.05em;margin-bottom:14px">Related Tools</h2>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px">
+      <a href="https://currency-converter.tabutility.com/" style="display:block;background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.12);border-radius:10px;padding:12px 16px;text-decoration:none;color:inherit">
+        <div style="font-size:13px;font-weight:600;color:#f1f5f9">Currency Converter</div><div style="font-size:11px;color:#94a3b8;margin-top:2px">Converters</div></a>
+      <a href="https://percentage-calculator.tabutility.com/" style="display:block;background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.12);border-radius:10px;padding:12px 16px;text-decoration:none;color:inherit">
+        <div style="font-size:13px;font-weight:600;color:#f1f5f9">Percentage Calculator</div><div style="font-size:11px;color:#94a3b8;margin-top:2px">Math Tools</div></a>
+      <a href="https://scientific-calculator.tabutility.com/" style="display:block;background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.12);border-radius:10px;padding:12px 16px;text-decoration:none;color:inherit">
+        <div style="font-size:13px;font-weight:600;color:#f1f5f9">Scientific Calculator</div><div style="font-size:11px;color:#94a3b8;margin-top:2px">Math Tools</div></a>
+      <a href="https://tip-calculator.tabutility.com/" style="display:block;background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.12);border-radius:10px;padding:12px 16px;text-decoration:none;color:inherit">
+        <div style="font-size:13px;font-weight:600;color:#f1f5f9">Tip Calculator</div><div style="font-size:11px;color:#94a3b8;margin-top:2px">Math Tools</div></a>
+    </div>
+  </div>
+</div>
 
-    <!-- Robots -->
-    <meta name="robots" content="index, follow" />
+<div style="max-width:820px;margin-left:auto;margin-right:auto;margin-top:8px;margin-bottom:24px;padding:0 16px">
+  <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);border-radius:14px;padding:20px 24px">
+    <h2 style="font-size:15px;font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:.05em;margin-bottom:4px">Frequently Asked Questions</h2>
+    <div style="border-bottom:1px solid rgba(255,255,255,0.08);padding:14px 0">
+      <div style="font-size:14px;font-weight:600;color:#f1f5f9;margin-bottom:6px">What unit categories are supported?</div>
+      <div style="font-size:13px;color:#94a3b8;line-height:1.5">Length, weight, temperature, area, volume and speed — covering the most common unit conversions.</div>
+    </div>
+    <div style="border-bottom:1px solid rgba(255,255,255,0.08);padding:14px 0">
+      <div style="font-size:14px;font-weight:600;color:#f1f5f9;margin-bottom:6px">Is this free?</div>
+      <div style="font-size:13px;color:#94a3b8;line-height:1.5">Yes — completely free, no sign-up needed.</div>
+    </div>
+    <div style="border-bottom:1px solid rgba(255,255,255,0.08);padding:14px 0">
+      <div style="font-size:14px;font-weight:600;color:#f1f5f9;margin-bottom:6px">Works on mobile?</div>
+      <div style="font-size:13px;color:#94a3b8;line-height:1.5">Yes — fully responsive on all devices.</div>
+    </div>
+    <div style="padding:14px 0">
+      <div style="font-size:14px;font-weight:600;color:#f1f5f9;margin-bottom:6px">How accurate are the conversions?</div>
+      <div style="font-size:13px;color:#94a3b8;line-height:1.5">Conversions use precise standard conversion factors — accurate enough for everyday use and engineering planning.</div>
+    </div>
+  </div>
+</div>
 
-    <!-- Google AdSense -->
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7039091592734005" crossorigin="anonymous"></script>
+<div style="text-align:center;padding:8px">
+  <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-7039091592734005" data-ad-slot="auto" data-ad-format="auto" data-full-width-responsive="true"></ins>
+  <script>(adsbygoogle=window.adsbygoogle||[]).push({});</script>
+</div>
 
-    <!-- Google Analytics -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-78VZWJ5B1W"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', 'G-78VZWJ5B1W');
-    </script>
+<script>
+const CATEGORIES = {
+  length: {
+    name: '📐 Length', emoji: '📐',
+    units: [
+      {id:'m', name:'Metre', abbr:'m', toBase:1},
+      {id:'km', name:'Kilometre', abbr:'km', toBase:1000},
+      {id:'cm', name:'Centimetre', abbr:'cm', toBase:0.01},
+      {id:'mm', name:'Millimetre', abbr:'mm', toBase:0.001},
+      {id:'um', name:'Micrometre', abbr:'μm', toBase:1e-6},
+      {id:'nm', name:'Nanometre', abbr:'nm', toBase:1e-9},
+      {id:'mi', name:'Mile', abbr:'mi', toBase:1609.344},
+      {id:'yd', name:'Yard', abbr:'yd', toBase:0.9144},
+      {id:'ft', name:'Foot', abbr:'ft', toBase:0.3048},
+      {id:'in', name:'Inch', abbr:'in', toBase:0.0254},
+      {id:'nmi', name:'Nautical Mile', abbr:'nmi', toBase:1852},
+      {id:'ly', name:'Light Year', abbr:'ly', toBase:9.461e15},
+    ]
+  },
+  weight: {
+    name: '⚖️ Weight', emoji: '⚖️',
+    units: [
+      {id:'kg', name:'Kilogram', abbr:'kg', toBase:1},
+      {id:'g', name:'Gram', abbr:'g', toBase:0.001},
+      {id:'mg', name:'Milligram', abbr:'mg', toBase:1e-6},
+      {id:'t', name:'Metric Tonne', abbr:'t', toBase:1000},
+      {id:'lb', name:'Pound', abbr:'lb', toBase:0.453592},
+      {id:'oz', name:'Ounce', abbr:'oz', toBase:0.0283495},
+      {id:'st', name:'Stone', abbr:'st', toBase:6.35029},
+      {id:'uton', name:'US Ton', abbr:'US ton', toBase:907.185},
+      {id:'ukton', name:'UK Ton', abbr:'UK ton', toBase:1016.05},
+      {id:'ct', name:'Carat', abbr:'ct', toBase:0.0002},
+    ]
+  },
+  temperature: {
+    name: '🌡️ Temperature', emoji: '🌡️',
+    units: [
+      {id:'c', name:'Celsius', abbr:'°C'},
+      {id:'f', name:'Fahrenheit', abbr:'°F'},
+      {id:'k', name:'Kelvin', abbr:'K'},
+      {id:'r', name:'Rankine', abbr:'°R'},
+    ],
+    special: true
+  },
+  area: {
+    name: '📦 Area', emoji: '📦',
+    units: [
+      {id:'m2', name:'Square Metre', abbr:'m²', toBase:1},
+      {id:'km2', name:'Square Kilometre', abbr:'km²', toBase:1e6},
+      {id:'cm2', name:'Square Centimetre', abbr:'cm²', toBase:1e-4},
+      {id:'mm2', name:'Square Millimetre', abbr:'mm²', toBase:1e-6},
+      {id:'ha', name:'Hectare', abbr:'ha', toBase:1e4},
+      {id:'ac', name:'Acre', abbr:'ac', toBase:4046.856},
+      {id:'mi2', name:'Square Mile', abbr:'mi²', toBase:2.590e6},
+      {id:'yd2', name:'Square Yard', abbr:'yd²', toBase:0.836127},
+      {id:'ft2', name:'Square Foot', abbr:'ft²', toBase:0.092903},
+      {id:'in2', name:'Square Inch', abbr:'in²', toBase:6.4516e-4},
+    ]
+  },
+  volume: {
+    name: '💧 Volume', emoji: '💧',
+    units: [
+      {id:'l', name:'Litre', abbr:'L', toBase:1},
+      {id:'ml', name:'Millilitre', abbr:'mL', toBase:0.001},
+      {id:'m3', name:'Cubic Metre', abbr:'m³', toBase:1000},
+      {id:'cm3', name:'Cubic Centimetre', abbr:'cm³', toBase:0.001},
+      {id:'gal', name:'US Gallon', abbr:'gal', toBase:3.78541},
+      {id:'ukgal', name:'UK Gallon', abbr:'UK gal', toBase:4.54609},
+      {id:'qt', name:'US Quart', abbr:'qt', toBase:0.946353},
+      {id:'pt', name:'US Pint', abbr:'pt', toBase:0.473176},
+      {id:'cup', name:'US Cup', abbr:'cup', toBase:0.236588},
+      {id:'floz', name:'US Fl. Oz.', abbr:'fl oz', toBase:0.0295735},
+      {id:'tbsp', name:'Tablespoon', abbr:'tbsp', toBase:0.0147868},
+      {id:'tsp', name:'Teaspoon', abbr:'tsp', toBase:0.00492892},
+    ]
+  },
+  speed: {
+    name: '🚀 Speed', emoji: '🚀',
+    units: [
+      {id:'ms', name:'Metres/Second', abbr:'m/s', toBase:1},
+      {id:'kph', name:'Km/Hour', abbr:'km/h', toBase:0.277778},
+      {id:'mph', name:'Miles/Hour', abbr:'mph', toBase:0.44704},
+      {id:'kt', name:'Knot', abbr:'kt', toBase:0.514444},
+      {id:'fps', name:'Feet/Second', abbr:'ft/s', toBase:0.3048},
+      {id:'mach', name:'Mach', abbr:'Mach', toBase:343},
+      {id:'c', name:'Speed of Light', abbr:'c', toBase:299792458},
+    ]
+  }
+};
 
-    <!-- Schema.org -->
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "WebApplication",
-      "name": "Unit Converter",
-      "url": "https://unit-converter.tabutility.com",
-      "description": "Free online unit converter with 19 categories and 150+ units. Convert length, weight, temperature, volume, speed, area, time, data storage, energy, pressure, power, force, torque, fuel economy, angle, frequency, typography, number systems and cooking measurements instantly.",
-      "applicationCategory": "UtilitiesApplication",
-      "operatingSystem": "Any",
-      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
-      "provider": { "@type": "Organization", "name": "Tabutility", "url": "https://tabutility.com" }
-    }
-    </script>
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.jsx"></script>
-  </body>
+let currentCat='length';
+
+function initTabs(){
+  const tabs=document.getElementById('catTabs');
+  Object.keys(CATEGORIES).forEach(key=>{
+    const c=CATEGORIES[key];
+    const btn=document.createElement('button');
+    btn.className='cat-tab'+(key===currentCat?' active':'');
+    btn.textContent=c.name;
+    btn.onclick=()=>selectCat(key);
+    tabs.appendChild(btn);
+  });
+}
+
+function selectCat(key){
+  currentCat=key;
+  document.querySelectorAll('.cat-tab').forEach((b,i)=>{
+    b.classList.toggle('active',Object.keys(CATEGORIES)[i]===key);
+  });
+  populateUnits();
+  convert();
+}
+
+function populateUnits(){
+  const cat=CATEGORIES[currentCat];
+  const sel=document.getElementById('fromUnit');
+  sel.innerHTML=cat.units.map(u=>`<option value="${u.id}">${u.name} (${u.abbr})</option>`).join('');
+}
+
+function fmtNum(n){
+  if(Math.abs(n)<0.0001||Math.abs(n)>=1e10) return n.toExponential(4);
+  const decimals=Math.abs(n)>=100?2:Math.abs(n)>=1?4:6;
+  return parseFloat(n.toFixed(decimals)).toLocaleString('en-US',{maximumFractionDigits:8});
+}
+
+function convertTemp(val, fromId){
+  const results={};
+  // Convert everything to Celsius first
+  let celsius;
+  switch(fromId){
+    case 'c': celsius=val; break;
+    case 'f': celsius=(val-32)*5/9; break;
+    case 'k': celsius=val-273.15; break;
+    case 'r': celsius=(val-491.67)*5/9; break;
+  }
+  results['c']=celsius;
+  results['f']=celsius*9/5+32;
+  results['k']=celsius+273.15;
+  results['r']=(celsius+273.15)*9/5;
+  return results;
+}
+
+function convert(){
+  const cat=CATEGORIES[currentCat];
+  const val=parseFloat(document.getElementById('valueInput').value);
+  const fromId=document.getElementById('fromUnit').value;
+  if(isNaN(val)){document.getElementById('resultsGrid').innerHTML='<div style="color:#475569;font-size:13px">Enter a valid number</div>';return;}
+
+  let results={};
+  if(cat.special){
+    results=convertTemp(val,fromId);
+  } else {
+    const fromUnit=cat.units.find(u=>u.id===fromId);
+    const baseVal=val*fromUnit.toBase;
+    cat.units.forEach(u=>{results[u.id]=baseVal/u.toBase;});
+  }
+
+  const grid=document.getElementById('resultsGrid');
+  grid.innerHTML=cat.units.map(u=>{
+    const v=results[u.id];
+    const isFrom=u.id===fromId;
+    return `<div class="result-card${isFrom?' highlight':''}" onclick="copyResult('${fmtNum(v)} ${u.abbr}')">
+      <div class="result-unit">${u.name}</div>
+      <div class="result-value">${fmtNum(v)}</div>
+      <div class="result-full">${u.abbr}</div>
+    </div>`;
+  }).join('');
+}
+
+function copyResult(txt){
+  navigator.clipboard.writeText(txt).then(()=>showToast());
+}
+
+function showToast(){
+  const t=document.getElementById('toast');
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),1800);
+}
+
+initTabs();
+populateUnits();
+convert();
+</script>
+</body>
 </html>
