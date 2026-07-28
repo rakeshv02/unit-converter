@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://unit-converter.tabutility.com/sitemap.xml
