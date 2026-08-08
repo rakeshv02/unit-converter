@@ -368,10 +368,10 @@ export default function UnitConverter() {
 
   const S = {
     page:       { minHeight: '100vh', background: '#f8fafc', fontFamily: font, padding: '0 0 80px' },
-    nav:        { background: '#0f172a', padding: '14px 20px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' },
+    nav:        { background: '#f8f7f4', padding: '14px 20px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' },
     navBrand:   { color: 'white', fontWeight: 700, fontSize: 18, textDecoration: 'none' },
-    navLink:    { color: '#94a3b8', fontSize: 13, textDecoration: 'none' },
-    hero:       { background: `linear-gradient(135deg, #0f172a 0%, ${groupColor} 100%)`, padding: '36px 20px 28px', textAlign: 'center', transition: 'background 0.4s' },
+    navLink:    { color: '#64748b', fontSize: 13, textDecoration: 'none' },
+    hero:       { background: `linear-gradient(135deg, #f8f7f4 0%, ${groupColor} 100%)`, padding: '36px 20px 28px', textAlign: 'center', transition: 'background 0.4s' },
     heroTitle:  { color: 'white', fontSize: 28, fontWeight: 800, margin: '0 0 6px' },
     heroSub:    { color: '#bfdbfe', fontSize: 13, margin: 0 },
     wrap:       { maxWidth: 680, margin: '0 auto', padding: '0 16px' },
@@ -380,20 +380,20 @@ export default function UnitConverter() {
     card:       { background: 'white', borderRadius: 16, boxShadow: '0 4px 24px rgba(0,0,0,0.08)', padding: 24, marginBottom: 20 },
     ioRow:      { display: 'grid', gridTemplateColumns: '1fr auto 1fr', gap: 12, alignItems: 'end', marginBottom: 16 },
     fieldLabel: { fontSize: 12, fontWeight: 600, color: '#64748b', marginBottom: 6 },
-    select:     { width: '100%', padding: '10px 12px', borderRadius: 10, border: '1.5px solid #e2e8f0', fontSize: 14, color: '#0f172a', background: 'white', cursor: 'pointer', outline: 'none', appearance: 'none', backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%2364748b' d='M6 8L1 3h10z'/%3E%3C/svg%3E")`, backgroundRepeat: 'no-repeat', backgroundPosition: 'right 10px center', paddingRight: 32 },
-    inputField: { width: '100%', padding: '12px 14px', borderRadius: 10, border: `1.5px solid ${groupColor}`, fontSize: 18, fontWeight: 600, color: '#0f172a', outline: 'none', boxSizing: 'border-box', background: '#f0f9ff', marginTop: 8 },
+    select:     { width: '100%', padding: '10px 12px', borderRadius: 10, border: '1.5px solid #e2e8f0', fontSize: 14, color: '#f8f7f4', background: 'white', cursor: 'pointer', outline: 'none', appearance: 'none', backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%2364748b' d='M6 8L1 3h10z'/%3E%3C/svg%3E")`, backgroundRepeat: 'no-repeat', backgroundPosition: 'right 10px center', paddingRight: 32 },
+    inputField: { width: '100%', padding: '12px 14px', borderRadius: 10, border: `1.5px solid ${groupColor}`, fontSize: 18, fontWeight: 600, color: '#f8f7f4', outline: 'none', boxSizing: 'border-box', background: '#f0f9ff', marginTop: 8 },
     outputBox:  { padding: '12px 14px', borderRadius: 10, marginTop: 8, border: '1.5px solid #e2e8f0', fontSize: 18, fontWeight: 700, color: groupColor, background: '#f8fafc', minHeight: 48, display: 'flex', alignItems: 'center' },
-    swapBtn:    { width: 40, height: 40, borderRadius: '50%', background: '#f1f5f9', border: '1.5px solid #e2e8f0', cursor: 'pointer', fontSize: 18, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, alignSelf: 'center', marginTop: 20 },
-    resultRow:  { background: '#f1f5f9', borderRadius: 10, padding: '12px 16px', fontSize: 14, color: '#475569', textAlign: 'center', marginBottom: 12 },
-    copyBtn:    { width: '100%', padding: '11px 0', background: output !== '' ? groupColor : '#e2e8f0', color: output !== '' ? 'white' : '#94a3b8', border: 'none', borderRadius: 10, fontWeight: 600, fontSize: 14, cursor: output !== '' ? 'pointer' : 'default' },
-    sectionTitle:{ fontSize: 12, fontWeight: 700, color: '#94a3b8', marginBottom: 10, letterSpacing: 1 },
+    swapBtn:    { width: 40, height: 40, borderRadius: '50%', background: '#0f172a', border: '1.5px solid #e2e8f0', cursor: 'pointer', fontSize: 18, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, alignSelf: 'center', marginTop: 20 },
+    resultRow:  { background: '#0f172a', borderRadius: 10, padding: '12px 16px', fontSize: 14, color: '#475569', textAlign: 'center', marginBottom: 12 },
+    copyBtn:    { width: '100%', padding: '11px 0', background: output !== '' ? groupColor : '#e2e8f0', color: output !== '' ? 'white' : '#64748b', border: 'none', borderRadius: 10, fontWeight: 600, fontSize: 14, cursor: output !== '' ? 'pointer' : 'default' },
+    sectionTitle:{ fontSize: 12, fontWeight: 700, color: '#64748b', marginBottom: 10, letterSpacing: 1 },
     quickGrid:  { display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 },
-    quickBtn:   { padding: '10px 14px', borderRadius: 10, border: '1.5px solid #e2e8f0', background: 'white', fontSize: 13, fontWeight: 600, color: '#334155', cursor: 'pointer', textAlign: 'left' },
-    footer:     { textAlign: 'center', marginTop: 32, fontSize: 13, color: '#94a3b8' },
+    quickBtn:   { padding: '10px 14px', borderRadius: 10, border: '1.5px solid #e2e8f0', background: 'white', fontSize: 13, fontWeight: 600, color: '#e2e8f0', cursor: 'pointer', textAlign: 'left' },
+    footer:     { textAlign: 'center', marginTop: 32, fontSize: 13, color: '#64748b' },
   };
 
   const groupTabStyle = (key) => ({ padding: '8px 18px', borderRadius: 20, border: 'none', background: activeGroup === key ? GROUPS[key].color : 'white', color: activeGroup === key ? 'white' : '#475569', fontWeight: 600, fontSize: 13, cursor: 'pointer', whiteSpace: 'nowrap', boxShadow: '0 1px 4px rgba(0,0,0,0.08)', flexShrink: 0 });
-  const catTabStyle   = (key) => ({ padding: '6px 14px', borderRadius: 16, border: 'none', background: category === key ? groupColor : '#f1f5f9', color: category === key ? 'white' : '#64748b', fontWeight: 600, fontSize: 12, cursor: 'pointer', whiteSpace: 'nowrap', flexShrink: 0 });
+  const catTabStyle   = (key) => ({ padding: '6px 14px', borderRadius: 16, border: 'none', background: category === key ? groupColor : '#0f172a', color: category === key ? 'white' : '#64748b', fontWeight: 600, fontSize: 12, cursor: 'pointer', whiteSpace: 'nowrap', flexShrink: 0 });
 
   return (
     <div style={S.page}>
@@ -436,7 +436,7 @@ export default function UnitConverter() {
                 {Object.entries(units).map(([k, u]) => <option key={k} value={k}>{u.label}</option>)}
               </select>
               <div style={S.outputBox}>
-                {output !== '' ? String(output) : <span style={{ color: '#cbd5e1' }}>Result</span>}
+                {output !== '' ? String(output) : <span style={{ color: '#334155' }}>Result</span>}
               </div>
             </div>
           </div>
@@ -457,7 +457,7 @@ export default function UnitConverter() {
         </div>
         <div style={S.footer}>
           ✓ Free · No sign-up · 19 categories · 150+ units<br />
-          <a href="https://tabutility.com" style={{ color: '#94a3b8' }}>tabutility.com</a>
+          <a href="https://tabutility.com" style={{ color: '#64748b' }}>tabutility.com</a>
         </div>
       </div>
     </div>
